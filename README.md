@@ -62,18 +62,34 @@ my_ml_project/
 │   ├── __init__.py
 │   └── linear_regression.py
 │
+├── optimizers/
+│   ├── __init__.py
+│   └── loss.py
+│
 ├── utils/
 │   ├── __init__.py
 │   └── data_preprocessing.py
 │
 ├── tests/
 │   ├── __init__.py
-│   └── test_linear_regression.py
+│   ├── test_data/
+│   │   ├── __init__.py
+│   │   └── test_dataset.py
+│   ├── test_models/
+│   │   ├── __init__.py
+│   │   └── test_linear_regression.py
+│   ├── test_optimizers/
+│   │   ├── __init__.py
+│   │   └── test_loss.py
+│   ├── test_utils/
+│   │   ├── __init__.py
+│   │   └── test_data_preprocessing.py
 │
 ├── main.py
 ├── README.md
 ├── requirements.txt
 └── setup.py
+
 ```
 
 ## Setup
