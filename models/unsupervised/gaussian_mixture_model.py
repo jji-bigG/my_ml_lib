@@ -16,12 +16,12 @@ class GMM:
         self.covs = np.array([np.eye(X.shape[1])
                              for _ in range(self.clusters)])
         for _ in range(max_iter):
-            # E-step
+            # E-step: estimate the probabilities for each data point
             likelihoods = np.array([self.weights[i] * self._gaussian(
                 X, self.means[i], self.covs[i]) for i in range(self.clusters)]).T
             responsibilities = likelihoods / \
                 np.sum(likelihoods, axis=1)[:, None]
-            # M-step
+            # M-step: update the gaussian parameters
             N = np.sum(responsibilities, axis=0)
             self.weights = N / X.shape[0]
             self.means = np.array([np.sum(
