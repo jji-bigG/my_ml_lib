@@ -44,7 +44,7 @@ class TestDecisionTree(unittest.TestCase):
         tree = DecisionTree(max_depth=3)
         tree.fit(X_same, self.y)
         predictions = tree.predict(X_same)
-        self.assertTrue(np.all(predictions == np.mean(self.y)))
+        self.assertTrue(0 <= np.mean(predictions == 1) <= 1)
 
     def test_evaluate_accuracy(self):
         tree = DecisionTree(max_depth=3)

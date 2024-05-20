@@ -36,6 +36,9 @@ class Boosting:
             self.weights.append(alpha)
 
     def predict(self, X):
+        if not self.models:
+            return np.ones(X.shape[0])
+
         model_preds = np.array([model.predict(X) for model in self.models])
         weighted_preds = np.dot(self.weights, model_preds)
         return np.sign(weighted_preds)

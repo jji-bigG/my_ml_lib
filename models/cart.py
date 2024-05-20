@@ -34,6 +34,10 @@ class DecisionTree:
         n_labels = len(np.unique(y))
 
         # stopping criteria
+        # if all features are the same, return the majority class
+        if np.all(X == X[0]):
+            return Node(value=np.argmax(np.bincount(y, weights=weights)))
+
         if (self.max_depth is not None and depth >= self.max_depth) or n_labels == 1 or n_samples < 2:
             return Node(value=np.argmax(np.bincount(y, weights=weights)))
 
