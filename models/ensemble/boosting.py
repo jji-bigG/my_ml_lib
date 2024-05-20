@@ -2,6 +2,11 @@ import numpy as np
 
 
 # apply boosting on the given model
+
+
+import numpy as np
+
+
 class Boosting:
     def __init__(self, model, n_estimators=10, learning_rate=0.1):
         self.model = model
@@ -17,18 +22,23 @@ class Boosting:
             model = self.model()
             model.fit(X, y, sample_weight=w)
             y_pred = model.predict(X)
-            error = np.sum(w * (y_pred - y) ** 2)
-            if error >= 0.5:
+            misclassified = (y_pred != y).astype(int)
+            error = np.sum(w * misclassified) / np.sum(w)
+
+            if error == 0 or error >= 0.5:
                 break
-            alpha = np.log((1 - error) / error) / 2
+
+            alpha = self.learning_rate * 0.5 * np.log((1 - error) / error)
             w *= np.exp(-alpha * y * y_pred)
             w /= np.sum(w)
+
             self.models.append(model)
             self.weights.append(alpha)
 
     def predict(self, X):
-        predictions = np.array([model.predict(X) for model in self.models])
-        return np.sign(np.dot(self.weights, predictions))
+        model_preds = np.array([model.predict(X) for model in self.models])
+        weighted_preds = np.dot(self.weights, model_preds)
+        return np.sign(weighted_preds)
 
     def evaluate(self, X, y):
         y_pred = self.predict(X)

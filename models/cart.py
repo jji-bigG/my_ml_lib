@@ -1,7 +1,8 @@
 import numpy as np
 
-
 # decision tree node
+
+
 class Node:
     def __init__(self, feature=None, threshold=None, left=None, right=None, value=None):
         self.feature = feature
@@ -10,8 +11,9 @@ class Node:
         self.right = right
         self.value = value
 
-
 # decision tree
+
+
 class DecisionTree:
     def __init__(self, max_depth=None):
         self.max_depth = max_depth
@@ -33,13 +35,13 @@ class DecisionTree:
 
         # stopping criteria
         if (self.max_depth is not None and depth >= self.max_depth) or n_labels == 1 or n_samples < 2:
-            return Node(value=np.average(y, weights=weights))
+            return Node(value=np.argmax(np.bincount(y, weights=weights)))
 
         # greedily select the best split
         feature, threshold = self._best_split(
             X, y, weights, n_samples, n_features)
         if feature is None:
-            return Node(value=np.average(y, weights=weights))
+            return Node(value=np.argmax(np.bincount(y, weights=weights)))
 
         left_indices, right_indices = self._split(X[:, feature], threshold)
 
@@ -75,6 +77,9 @@ class DecisionTree:
         return left_indices, right_indices
 
     def _gini_impurity(self, y, weights, left_indices, right_indices):
+        if len(left_indices) == 0 or len(right_indices) == 0:
+            return 0
+
         weight_left = np.sum(weights[left_indices])
         weight_right = np.sum(weights[right_indices])
         weight_total = weight_left + weight_right
@@ -82,12 +87,20 @@ class DecisionTree:
         if weight_total == 0:
             return 0
 
-        left_gini = 1 - \
-            np.sum(
-                (np.bincount(y[left_indices], weights=weights[left_indices]) / weight_left) ** 2)
-        right_gini = 1 - \
-            np.sum((np.bincount(
-                y[right_indices], weights=weights[right_indices]) / weight_right) ** 2)
+        def weighted_bincount(y, weights):
+            unique, counts = np.unique(y, return_inverse=True)
+            bincount = np.bincount(counts, weights=weights)
+            return dict(zip(unique, bincount))
+
+        left_bincount = weighted_bincount(
+            y[left_indices], weights[left_indices])
+        right_bincount = weighted_bincount(
+            y[right_indices], weights[right_indices])
+
+        left_gini = 1 - sum((count / weight_left) **
+                            2 for count in left_bincount.values())
+        right_gini = 1 - sum((count / weight_right) **
+                             2 for count in right_bincount.values())
 
         return (weight_left * left_gini + weight_right * right_gini) / weight_total
 

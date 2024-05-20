@@ -8,7 +8,6 @@ class TestAdaBoost(unittest.TestCase):
     def setUp(self):
         self.X = np.array([[1, 2], [1, -1], [2, 2], [2, -1], [3, 2], [3, -1]])
         self.y = np.array([1, -1, 1, -1, 1, -1])
-        self.weights = np.array([1, 1, 1, 1, 1, 1])
 
     def test_basic_functionality(self):
         ada = AdaBoost(n_estimators=10, max_depth=1)
@@ -18,7 +17,6 @@ class TestAdaBoost(unittest.TestCase):
 
     def test_weighted_samples(self):
         ada = AdaBoost(n_estimators=10, max_depth=1)
-        weights = np.array([10, 1, 10, 1, 10, 1])  # High weight on class 1
         ada.fit(self.X, self.y)
         predictions = ada.predict(self.X)
         self.assertTrue(np.array_equal(predictions, self.y))
@@ -45,8 +43,6 @@ class TestAdaBoost(unittest.TestCase):
 
     def test_with_extreme_weights(self):
         ada = AdaBoost(n_estimators=10, max_depth=1)
-        weights_extreme = np.array(
-            [0.1, 1000, 0.1, 1000, 0.1, 1000])  # Avoid zero weights
         ada.fit(self.X, self.y)
         predictions = ada.predict(self.X)
         self.assertTrue(np.array_equal(predictions, self.y))

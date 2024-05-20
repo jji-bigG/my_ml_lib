@@ -1,6 +1,6 @@
-import numpy as np
 from models.ensemble.bagging import Bagging
 from models.cart import DecisionTree
+import numpy as np
 
 
 class RandomForest:

@@ -22,13 +22,10 @@ class AdaBoost:
             misclassified = (predictions != y).astype(int)
             error = np.dot(weights, misclassified) / np.sum(weights)
 
-            if error == 0:
-                alpha = np.inf
-            elif error == 1:
-                alpha = -np.inf
-            else:
-                alpha = 0.5 * np.log((1 - error) / error)
+            if error == 0 or error >= 0.5:
+                break
 
+            alpha = 0.5 * np.log((1 - error) / error)
             weights *= np.exp(alpha * misclassified)
             weights /= np.sum(weights)
 
