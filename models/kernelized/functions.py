@@ -13,3 +13,7 @@ def polynomial_kernel(x, y, p=3):
 
 def gaussian_kernel(x, y, sigma=5.0):
     return np.exp(-np.linalg.norm(x-y)**2 / (2 * (sigma ** 2)))
+
+
+def rbf_kernel(x, y, gamma=0.1):
+    return np.exp(-gamma * np.linalg.norm(x - y) ** 2)
