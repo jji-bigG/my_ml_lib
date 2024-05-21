@@ -1,7 +1,8 @@
 import unittest
 import numpy as np
 
-from models.dl.conv import Conv2D, convolve, maxpool
+from data.augmentation.image import convolve, maxpool
+from models.dl.conv import Conv2D
 
 # Assuming the Conv2D class and helper functions convolve and maxpool are defined above
 
